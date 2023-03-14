@@ -1,0 +1,104 @@
+---
+openapi: 3.0.0
+info:
+  title: Istio Routing Workshop API
+  description: Istio Routing Workshop API
+  version: 0.0.1
+servers:
+- url: https://dev-3.gcp-workshop-chtcz5.awsrnd.link/mfes/one/api
+  description: Workshop API Dev
+- url: https://virtserver.swaggerhub.com/csvsf/frontend-one-api/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: svc-one-backend-one
+  description: svc-one microservice from backend-one namespace
+- name: svc-two-backend-one
+  description: svc-two microservice from backend-one namespace
+- name: svc-exernal
+  description: external US Patent service https://developer.uspto.gov/ds-api
+paths:
+  /anything/services/one:
+    get:
+      tags:
+      - svc-one-backend-one
+      summary: calls svc-one microservice
+      operationId: callSvcOneBackendOne
+      responses:
+        "200":
+          description: positive response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /something-else/two:
+    get:
+      tags:
+      - svc-two-backend-one
+      summary: calls svc-two microservice
+      operationId: callSvcTwoBackendOne
+      responses:
+        "200":
+          description: positive response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+  /uspto/ds-api:
+    get:
+      tags:
+      - svc-external
+      summary: calls external microservice
+      operationId: callSvcExternal
+      responses:
+        "200":
+          description: Returns a list of data sets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/USPTOResponse'
+              example:
+                total: 2
+                apis:
+                - apiKey: oa_citations
+                  apiVersionNumber: v1
+                  apiUrl: https://developer.uspto.gov/ds-api/oa_citations/v1/fields
+                  apiDocumentationUrl: https://developer.uspto.gov/ds-api-docs/index.html?url=https://developer.uspto.gov/ds-api/swagger/docs/oa_citations.json
+                - apiKey: cancer_moonshot
+                  apiVersionNumber: v1
+                  apiUrl: https://developer.uspto.gov/ds-api/cancer_moonshot/v1/fields
+                  apiDocumentationUrl: https://developer.uspto.gov/ds-api-docs/index.html?url=https://developer.uspto.gov/ds-api/swagger/docs/cancer_moonshot.json
+components:
+  schemas:
+    MessageResponse:
+      required:
+      - message
+      type: object
+      properties:
+        message:
+          type: string
+    USPTOResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        apis:
+          type: array
+          items:
+            $ref: '#/components/schemas/USPTOResponse_apis'
+    USPTOResponse_apis:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: To be used as a dataset parameter value
+        apiVersionNumber:
+          type: string
+          description: To be used as a version parameter value
+        apiUrl:
+          type: string
+          description: The URL describing the dataset's fields
+          format: uriref
+        apiDocumentationUrl:
+          type: string
+          description: A URL to the API console for each API
+          format: uriref
