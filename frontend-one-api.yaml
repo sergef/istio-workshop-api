@@ -1,8 +1,8 @@
 ---
 openapi: 3.0.0
 info:
-  title: Istio Routing Workshop API
-  description: Istio Routing Workshop API
+  title: Istio Routing Workshop BFF API
+  description: Istio Routing Workshop BFF API
   version: 0.0.1
 servers:
 - url: https://dev-3.gcp-workshop-chtcz5.awsrnd.link/mfes/one/api
